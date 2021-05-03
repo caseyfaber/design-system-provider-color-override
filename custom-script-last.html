@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>Sandbox</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <h1>Script last with custom element</h1>
+    <my-design-system-provider use-defaults>
+      <fast-button>Hello world</fast-button>
+      <my-tag>Custom element</my-tag>
+    </my-design-system-provider>
+
+    <ul>
+      <li><a href="index.html">Button only, script last</a></li>
+      <li><a href="script-first.html">Button only, script first</a></li>
+      <li>
+        <a href="custom-script-last.html"
+          >Button and custom element, script last</a
+        >
+      </li>
+      <li>
+        <a href="custom-script-first.html"
+          >Button and custom element, script first</a
+        >
+      </li>
+    </ul>
+    <script src="src/index.ts"></script>
+  </body>
+</html>
