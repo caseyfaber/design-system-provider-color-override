@@ -1,31 +1,24 @@
-import {
-  createColorPalette,
-  FASTButton,
-  FASTDesignSystemProvider,
-  parseColorString
-} from "@microsoft/fast-components";
-import { css } from "@microsoft/fast-element";
+import { createColorPalette, FASTDesignSystemProvider, parseColorString } from '@microsoft/fast-components';
+import { css } from '@microsoft/fast-element';
 import {
   defineDesignSystemProvider,
   designSystemProperty,
   DesignSystemProviderTemplate as template,
-  display
-} from "@microsoft/fast-foundation";
+  display,
+} from '@microsoft/fast-foundation';
 
 @defineDesignSystemProvider({
-  name: "my-design-system-provider",
+  name: 'my-design-system-provider',
   template,
   styles: css`
-    ${display("block")} {
-      --body-font: "Segoe UI";
+    ${display('block')} :host {
+      --body-font: 'Segoe UI';
     }
-  `
+  `,
 })
 export class MyDesignSystemProvider extends FASTDesignSystemProvider {
   @designSystemProperty({
-    default: createColorPalette(parseColorString("#FF0000"))
+    default: createColorPalette(parseColorString('#FF0000')),
   })
   neutralPalette: any;
 }
-
-FASTButton;

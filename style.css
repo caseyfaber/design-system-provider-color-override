@@ -1,3 +1,8 @@
 :not(:defined) {
   visibility: hidden;
 }
+
+my-design-system-provider,
+fast-design-system-provider {
+  padding: 20px;
+}
