@@ -1,17 +1,3 @@
-import {
-  accentForegroundRestBehavior,
-  neutralFillStealthActiveBehavior,
-  neutralFillStealthHover,
-  neutralFillStealthHoverBehavior,
-  neutralFillStealthRestBehavior,
-  neutralFillStealthSelected,
-  neutralFillStealthSelectedBehavior,
-  neutralFocusBehavior,
-  neutralFocusInnerAccentBehavior,
-  neutralForegroundActiveBehavior,
-  neutralForegroundHintBehavior,
-  neutralForegroundRestBehavior,
-} from '@microsoft/fast-components';
 import { css } from '@microsoft/fast-element';
 import {
   cssCustomPropertyBehaviorFactory,
@@ -22,23 +8,69 @@ import {
   forcedColorsStylesheetBehavior,
 } from '@microsoft/fast-foundation';
 import { SystemColors } from '@microsoft/fast-web-utilities';
+import {
+  accentForegroundRestBehavior,
+  neutralFillStealthActiveBehavior,
+  neutralFillStealthHoverBehavior,
+  neutralFillStealthRestBehavior,
+  neutralFillStealthSelectedBehavior,
+  neutralFocusBehavior,
+  neutralFocusInnerAccentBehavior,
+  neutralForegroundActiveBehavior,
+  neutralForegroundRestBehavior,
+  neutralFillStealthHover,
+  neutralFillStealthSelected,
+  FASTDesignSystemProvider,
+} from '@microsoft/fast-components';
 
-const horizontalSpace = 'var(--design-unit) * 2px + 4px';
-const heightNumber = `(3 + ((var(--base-height-multiplier) + var(--density)) * var(--design-unit)))`;
+const heightNumber = `(var(--base-height-multiplier) + var(--density)) * var(--design-unit))`;
 
 const ltr = css`
+  .expand-collapse-glyph {
+    transform: rotate(0deg);
+  }
+  :host(.nested) .expand-collapse-button {
+    left: var(--expand-collapse-button-nested-width, calc(${heightNumber} * -1px));
+  }
   :host([selected])::after {
-    left: 0;
+    left: calc(var(--focus-outline-width) * 1px);
+  }
+  :host([expanded]) > .positioning-region .expand-collapse-glyph {
+    transform: rotate(45deg);
   }
 `;
 
 const rtl = css`
+  .expand-collapse-glyph {
+    transform: rotate(180deg);
+  }
+  :host(.nested) .expand-collapse-button {
+    right: var(--expand-collapse-button-nested-width, calc(${heightNumber} * -1px));
+  }
   :host([selected])::after {
-    right: 0;
+    right: calc(var(--focus-outline-width) * 1px);
+  }
+  :host([expanded]) > .positioning-region .expand-collapse-glyph {
+    transform: rotate(135deg);
   }
 `;
 
-export const TaskItemStyles = css`
+export const expandCollapseButtonSize =
+  '((var(--base-height-multiplier) / 2) * var(--design-unit)) + ((var(--design-unit) * var(--density)) / 2)';
+
+const expandCollapseHoverBehavior = cssCustomPropertyBehaviorFactory(
+  'neutral-stealth-hover-over-hover',
+  (x) => neutralFillStealthHover(neutralFillStealthHover)(x),
+  FASTDesignSystemProvider.findProvider
+);
+
+const selectedExpandCollapseHoverBehavior = cssCustomPropertyBehaviorFactory(
+  'neutral-stealth-hover-over-selected',
+  (x) => neutralFillStealthHover(neutralFillStealthSelected)(x),
+  FASTDesignSystemProvider.findProvider
+);
+
+export const TreeItemStyles = css`
   ${display('block')} :host {
     contain: content;
     position: relative;
@@ -47,13 +79,8 @@ export const TaskItemStyles = css`
     background: ${neutralFillStealthRestBehavior.var};
     cursor: pointer;
     font-family: var(--body-font);
+    --expand-collapse-button-size: calc(${heightNumber} * 1px);
     --tree-item-nested-width: 0;
-  }
-
-  :host {
-    font-size: var(--type-ramp-base-font-size);
-    line-height: var(--type-ramp-base-line-height);
-    font-weight: 400;
   }
 
   :host(:focus) > .positioning-region {
@@ -87,7 +114,6 @@ export const TaskItemStyles = css`
 
   .positioning-region:hover {
     background: ${neutralFillStealthHoverBehavior.var};
-    color: ${accentForegroundRestBehavior.var};
   }
 
   .positioning-region:active {
@@ -100,20 +126,46 @@ export const TaskItemStyles = css`
     white-space: nowrap;
     width: 100%;
     height: calc(${heightNumber} * 1px);
-    margin-inline-start: calc(${horizontalSpace});
-    margin-inline-end: calc(${horizontalSpace});
+    margin-inline-start: calc(var(--design-unit) * 2px + 8px);
+    font-size: var(--type-ramp-base-font-size);
+    line-height: var(--type-ramp-base-line-height);
+    font-weight: 400;
   }
 
   .items {
     display: none;
     ${
-      /* Font size should be based off calc(1em + (design-unit + glyph-size-number) * 1px) -
+      /* Font size should be based off calc(1em + (design-unit + glyph-size-number) * 1px) - 
             update when density story is figured out */ ''
     } font-size: calc(1em + (var(--design-unit) + 16) * 1px);
   }
 
-  .content {
-    flex: 1;
+  .expand-collapse-button {
+    background: none;
+    border: none;
+    outline: none;
+    ${
+      /* Width and Height should be based off calc(glyph-size-number + (design-unit * 4) * 1px) - 
+            update when density story is figured out */ ''
+    } width: calc((${expandCollapseButtonSize} + (var(--design-unit) * 2)) * 1px);
+    height: calc((${expandCollapseButtonSize} + (var(--design-unit) * 2)) * 1px);
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 6px;
+    margin-right: 6px;
+  }
+
+  .expand-collapse-glyph {
+    ${/* Glyph size is temporary - 
+            replace when glyph-size var is added */ ''} width: 16px;
+    height: 16px;
+    transition: transform 0.1s linear;
+
+    pointer-events: none;
+    fill: currentcolor;
   }
 
   .start,
@@ -123,7 +175,7 @@ export const TaskItemStyles = css`
   }
 
   ::slotted(svg) {
-    ${/* Glyph size is temporary -
+    ${/* Glyph size is temporary - 
             replace when glyph-size var is added */ ''} width: 16px;
     height: 16px;
   }
@@ -140,7 +192,7 @@ export const TaskItemStyles = css`
     } margin-inline-start: calc(var(--design-unit) * 2px + 2px);
   }
 
-  :host > .items {
+  :host([expanded]) > .items {
     display: block;
   }
 
@@ -149,38 +201,56 @@ export const TaskItemStyles = css`
     cursor: ${disabledCursor};
   }
 
+  :host(.nested) .content-region {
+    position: relative;
+    margin-inline-start: var(--expand-collapse-button-size);
+  }
+
+  :host(.nested) .expand-collapse-button {
+    position: absolute;
+  }
+
+  :host(.nested) .expand-collapse-button:hover {
+    background: ${expandCollapseHoverBehavior.var};
+  }
+
   :host([selected]) .positioning-region {
     background: ${neutralFillStealthSelectedBehavior.var};
+  }
+
+  :host([selected]) .expand-collapse-button:hover {
+    background: ${selectedExpandCollapseHoverBehavior.var};
   }
 
   :host([selected])::after {
     content: '';
     display: block;
     position: absolute;
-    top: 0;
-    width: 4px;
-    height: calc(${heightNumber} * 1px);
+    top: calc((${heightNumber} / 4) * 1px);
+    width: 3px;
+    height: calc((${heightNumber} / 2) * 1px);
     ${
       /* The french fry background needs to be calculated based on the selected background state for this control.
-            We currently have no way of chaning that, so setting to accent-foreground-rest for the time being */ ''
+            We currently have no way of changing that, so setting to accent-foreground-rest for the time being */ ''
     } background: ${accentForegroundRestBehavior.var};
+    border-radius: calc(var(--corner-radius) * 1px);
   }
 
-  ::slotted(enabler-task-item) {
+  ::slotted(fast-tree-item) {
     --tree-item-nested-width: 1em;
-    color: ${neutralForegroundHintBehavior.var};
-    font-size: var(--type-ramp-minus-1-font-size);
+    --expand-collapse-button-nested-width: calc(${heightNumber} * -1px);
   }
 `.withBehaviors(
   accentForegroundRestBehavior,
   neutralFillStealthSelectedBehavior,
   neutralFillStealthActiveBehavior,
+  expandCollapseHoverBehavior,
   neutralFillStealthHoverBehavior,
+  selectedExpandCollapseHoverBehavior,
   neutralFillStealthRestBehavior,
   neutralFocusBehavior,
   neutralFocusInnerAccentBehavior,
   neutralForegroundActiveBehavior,
-  neutralForegroundHintBehavior,
   neutralForegroundRestBehavior,
   new DirectionalStyleSheetBehavior(ltr, rtl),
   forcedColorsStylesheetBehavior(
@@ -191,11 +261,7 @@ export const TaskItemStyles = css`
         background: ${SystemColors.Field};
         color: ${SystemColors.FieldText};
       }
-      :host .content-region {
-        color: ${SystemColors.FieldText};
-      }
-      :host .content-region .start,
-      :host .content-region .end {
+      :host .content-region .expand-collapse-glyph {
         fill: ${SystemColors.FieldText};
       }
       :host .positioning-region:hover,
@@ -206,8 +272,10 @@ export const TaskItemStyles = css`
       :host([selected]) .positioning-region .content-region {
         color: ${SystemColors.HighlightText};
       }
+      :host .positioning-region:hover .content-region .expand-collapse-glyph,
       :host .positioning-region:hover .content-region .start,
       :host .positioning-region:hover .content-region .end,
+      :host([selected]) .content-region .expand-collapse-glyph,
       :host([selected]) .content-region .start,
       :host([selected]) .content-region .end {
         fill: ${SystemColors.HighlightText};
@@ -225,8 +293,10 @@ export const TaskItemStyles = css`
         opacity: 1;
         color: ${SystemColors.GrayText};
       }
+      :host([disabled]) .content-region .expand-collapse-glyph,
       :host([disabled]) .content-region .start,
       :host([disabled]) .content-region .end,
+      :host([disabled]) .positioning-region:hover .content-region .expand-collapse-glyph,
       :host([disabled]) .positioning-region:hover .content-region .start,
       :host([disabled]) .positioning-region:hover .content-region .end {
         fill: ${SystemColors.GrayText};
@@ -234,8 +304,15 @@ export const TaskItemStyles = css`
       :host([disabled]) .positioning-region:hover {
         background: ${SystemColors.Field};
       }
+      .expand-collapse-glyph,
       .start,
       .end {
+        fill: ${SystemColors.FieldText};
+      }
+      :host(.nested) .expand-collapse-button:hover {
+        background: ${SystemColors.Field};
+      }
+      :host(.nested) .expand-collapse-button:hover .expand-collapse-glyph {
         fill: ${SystemColors.FieldText};
       }
     `

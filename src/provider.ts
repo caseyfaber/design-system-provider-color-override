@@ -1,4 +1,12 @@
-import { createColorPalette, FASTDesignSystemProvider, parseColorString } from '@microsoft/fast-components';
+import {
+  FASTButton,
+  FASTTreeItem,
+  FASTTreeView,
+  createColorPalette,
+  FASTDesignSystemProvider,
+  parseColorString,
+  FASTDivider,
+} from '@microsoft/fast-components';
 import { css } from '@microsoft/fast-element';
 import {
   defineDesignSystemProvider,
@@ -6,6 +14,12 @@ import {
   DesignSystemProviderTemplate as template,
   display,
 } from '@microsoft/fast-foundation';
+
+FASTButton;
+FASTDesignSystemProvider;
+FASTTreeItem;
+FASTTreeView;
+FASTDivider;
 
 @defineDesignSystemProvider({
   name: 'my-design-system-provider',
