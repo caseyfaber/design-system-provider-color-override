@@ -9,6 +9,7 @@
     <h1>Mix of default and custom elements, script last</h1>
     <my-design-system-provider use-defaults>
       <fast-button>I'm a button</fast-button>
+      <fast-divider></fast-divider>
       <fast-tree-view>
         <fast-tree-item>FAST Tree item 1</fast-tree-item>
         <fast-tree-item selected>FAST Tree item 2</fast-tree-item>
@@ -20,17 +21,11 @@
         <my-tree-item selected>My tree item 2</my-tree-item>
         <my-tree-item>My tree item 3</my-tree-item>
       </my-tree-view>
-      <fast-divider></fast-divider>
-      <my-task-list>
-        <my-task-item>My task item 1</my-task-item>
-        <my-task-item selected>My task item 2</my-task-item>
-        <my-task-item>My task item 3</my-task-item>
-      </my-task-list>
     </my-design-system-provider>
 
     <ul>
-      <li><a href="index.html">Button only, script last</a></li>
-      <li><a href="script-first.html">Button only, script first</a></li>
+      <li><a href="index.html">FAST elements only, script last</a></li>
+      <li><a href="script-first.html">FAST elements only, script first</a></li>
       <li><a href="custom-script-last.html">Custom element, script last</a></li>
       <li><a href="custom-script-first.html">Custom element, script first</a></li>
       <li><a href="fast-provider-last.html">FAST design system provider, script last</a></li>

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "pretty": true,
     "target": "ES2015",
-    "module": "ES2015",
+    "module": "ESNext",
     "moduleResolution": "node",
     "importHelpers": true,
     "experimentalDecorators": true,
@@ -13,10 +13,7 @@
     "preserveConstEnums": true,
     "stripInternal": true,
     "strict": true,
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "ES2015", "ES2016.Array.Include"],
     "rootDir": "src",
     "strictPropertyInitialization": false
   }

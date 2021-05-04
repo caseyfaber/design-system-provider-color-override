@@ -20,10 +20,10 @@ import {
   neutralForegroundRestBehavior,
   neutralFillStealthHover,
   neutralFillStealthSelected,
-  FASTDesignSystemProvider,
 } from '@microsoft/fast-components';
+import { MyDesignSystemProvider } from '../provider';
 
-const heightNumber = `(var(--base-height-multiplier) + var(--density)) * var(--design-unit))`;
+const heightNumber = `((var(--base-height-multiplier) + var(--density)) * var(--design-unit))`;
 
 const ltr = css`
   .expand-collapse-glyph {
@@ -61,13 +61,13 @@ export const expandCollapseButtonSize =
 const expandCollapseHoverBehavior = cssCustomPropertyBehaviorFactory(
   'neutral-stealth-hover-over-hover',
   (x) => neutralFillStealthHover(neutralFillStealthHover)(x),
-  FASTDesignSystemProvider.findProvider
+  MyDesignSystemProvider.findProvider
 );
 
 const selectedExpandCollapseHoverBehavior = cssCustomPropertyBehaviorFactory(
   'neutral-stealth-hover-over-selected',
   (x) => neutralFillStealthHover(neutralFillStealthSelected)(x),
-  FASTDesignSystemProvider.findProvider
+  MyDesignSystemProvider.findProvider
 );
 
 export const TreeItemStyles = css`
